@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Era uma vez</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --highlight: #ff8ab8; /* valor padrão */
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+      transition: background 0.8s;
+    }
+    #container {
+      background: #ffffffdd;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      max-width: 600px;
+      width: 100%;
+      position: relative;
+      border-top: 8px solid var(--highlight);
+      transition: border-color 0.8s;
+    }
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2em;
+      color: #333;
+    }
+    #text {
+      font-size: 1.1em;
+      margin: 20px 0;
+      min-height: 100px;
+      color: #555;
+    }
+    button {
+      background: var(--highlight);
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      margin: 5px;
+      transition: filter 0.3s, background 0.3s;
+      font-weight: 500;
+      color: #fff;
+    }
+    button:hover {
+      filter: brightness(1.2);
+    }
+    #img {
+      width: 120px;
+      height: 120px;
+      margin: 15px auto;
+      border-radius: 50%;
+      overflow: hidden;
+      display: none;
+    }
+    #progress {
+      width: 100%;
+      height: 6px;
+      background: #eee;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+    #progress-bar {
+      width: 0%;
+      height: 100%;
+      background: var(--highlight);
+      border-radius: 3px;
+      transition: width 0.4s;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h1>Era uma vez 🐧</h1>
+    <div id="img"><img src="" alt="" id="scene-img" width="120" height="120"></div>
+    <div id="text">Fiz pensando em você!💖<br>Espero que goste!</div>
+    <button id="action-btn">Iniciar</button>
+    <div id="progress"><div id="progress-bar"></div></div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <script>
+    const scenes = [
+      {
+        text: "Era uma vez um pinguim solitário, sonhador e curioso, explorando as vastas geleiras sob o céu do sul.",
+        img: "https://videos.openai.com/vg-assets/assets%2Ftask_01jz7mtc43f6v8yjkv3a4j0q1w%2F1751529715_img_1.webp?st=2025-07-03T06%3A51%3A04Z&se=2025-07-09T07%3A51%3A04Z&sks=b&skt=2025-07-03T06%3A51%3A04Z&ske=2025-07-09T07%3A51%3A04Z&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skoid=8ebb0df1-a278-4e2e-9c20-f2d373479b3a&skv=2019-02-02&sv=2018-11-09&sr=b&sp=r&spr=https%2Chttp&sig=27ybJTT51KWqtzJBEnbdWshv04nKZ1Gy9lbscrno0%2BE%3D&az=oaivgprodscus",
+        color: "#85C1E9", // gelo suave
+        bg: "linear-gradient(135deg, #D6EAF8 0%, #EBF5FB 100%)"
+      },
+      {
+        text: "Numa manhã dourada, ele avistou uma sombra distante: outro pinguim, tão destemido quanto ele.",
+        img: "https://videos.openai.com/vg-assets/assets%2Ftask_01jz7ndc7qfb0bh32f4w5v8wbz%2F1751530286_img_1.webp?st=2025-07-03T06%3A51%3A04Z&se=2025-07-09T07%3A51%3A04Z&sks=b&skt=2025-07-03T06%3A51%3A04Z&ske=2025-07-09T07%3A51%3A04Z&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skoid=8ebb0df1-a278-4e2e-9c20-f2d373479b3a&skv=2019-02-02&sv=2018-11-09&sr=b&sp=r&spr=https%2Chttp&sig=%2Bbww5Wd8ggsdpXye9HpN%2FBg4VDd7tdTiIWRCSElGZ9A%3D&az=oaivgprodscus",
+        color: "#F5B041", // amanhecer dourado
+        bg: "linear-gradient(135deg, #FCF3CF 0%, #FDEBD0 100%)"
+      },
+      {
+        text: "Com o coração acelerado, ele deslizou sobre o gelo para cumprimentar seu novo amigo.",
+        img: "https://videos.openai.com/vg-assets/assets%2Ftask_01jz7ngr1dff0ag659b93zdc4n%2F1751530457_img_0.webp?st=2025-07-03T06%3A40%3A29Z&se=2025-07-09T07%3A40%3A29Z&sks=b&skt=2025-07-03T06%3A40%3A29Z&ske=2025-07-09T07%3A40%3A29Z&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skoid=8ebb0df1-a278-4e2e-9c20-f2d373479b3a&skv=2019-02-02&sv=2018-11-09&sr=b&sp=r&spr=https%2Chttp&sig=ycYeiicfOwXZoqC1yCNfZskd0JTypkDRRQjwqauOtD4%3D&az=oaivgprodscus",
+        color: "#58D68D", // verde de floresta
+        bg: "linear-gradient(135deg, #E8F8F5 0%, #D1F2EB 100%)"
+      },
+      {
+        text: "Juntos, enfrentaram tempestades geladas.",
+        img: "https://videos.openai.com/vg-assets/assets%2Ftask_01jz7p194eew1sn0cfzhs8hryp%2F1751530996_img_0.webp?st=2025-07-03T06%3A51%3A04Z&se=2025-07-09T07%3A51%3A04Z&sks=b&skt=2025-07-03T06%3A51%3A04Z&ske=2025-07-09T07%3A51%3A04Z&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skoid=8ebb0df1-a278-4e2e-9c20-f2d373479b3a&skv=2019-02-02&sv=2018-11-09&sr=b&sp=r&spr=https%2Chttp&sig=b3nksQ1nGMHJ8WsZDXi7qkdVQUIzg%2BIwx9J3yZ31h%2Fs%3D&az=oaivgprodscus",
+        color: "#5D6D7E", // cinza de tempestade
+        bg: "linear-gradient(135deg, #CACFD2 0%, #F2F3F4 100%)"
+      },
+      {
+        text: "Construíram um abrigo aconchegante de blocos de gelo e partilharam histórias ao redor de uma pequena fogueira.",
+        img: "https://videos.openai.com/vg-assets/assets%2Ftask_01jz7nrkpff7tsy950c9g5seex%2F1751530709_img_0.webp?st=2025-07-03T06%3A49%3A47Z&se=2025-07-09T07%3A49%3A47Z&sks=b&skt=2025-07-03T06%3A49%3A47Z&ske=2025-07-09T07%3A49%3A47Z&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skoid=8ebb0df1-a278-4e2e-9c20-f2d373479b3a&skv=2019-02-02&sv=2018-11-09&sr=b&sp=r&spr=https%2Chttp&sig=Xo1qJjR%2FQtNrWq45mcu1G6iOVaLePJzrLP6bLcTOjzU%3D&az=oaivgprodscus",
+        color: "#F39C12", // fogo acolhedor
+        bg: "linear-gradient(135deg, #FEF5E7 0%, #FDEBD0 100%)"
+      },
+      {
+        text: "Em cada pôr do sol, seus olhos brilhavam de alegria e cumplicidade.",
+        img: "https://videos.openai.com/vg-assets/assets%2Ftask_01jz7nyz6te4a877n4n11qymns%2F1751530918_img_1.webp?st=2025-07-03T06%3A51%3A02Z&se=2025-07-09T07%3A51%3A02Z&sks=b&skt=2025-07-03T06%3A51%3A02Z&ske=2025-07-09T07%3A51%3A02Z&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skoid=8ebb0df1-a278-4e2e-9c20-f2d373479b3a&skv=2019-02-02&sv=2018-11-09&sr=b&sp=r&spr=https%2Chttp&sig=Vr%2BuAWCYkmyX4rB33f5Ve%2FFa%2BEjOndQkurDXoolECMY%3D&az=oaivgprodscus",
+        color: "#AF7AC5", // púrpura do entardecer
+        bg: "linear-gradient(135deg, #F4ECF7 0%, #EBDEF0 100%)"
+      },
+      {
+        text: "O mundo parecia maior, mais colorido e cheio de promessas de aventuras futuras.",
+        img: "https://videos.openai.com/vg-assets/assets%2Ftask_01jz7p2w39fg6sykpg95pczv2c%2F1751531046_img_0.webp?st=2025-07-03T06%3A49%3A27Z&se=2025-07-09T07%3A49%3A27Z&sks=b&skt=2025-07-03T06%3A49%3A27Z&ske=2025-07-09T07%3A49%3A27Z&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skoid=8ebb0df1-a278-4e2e-9c20-f2d373479b3a&skv=2019-02-02&sv=2018-11-09&sr=b&sp=r&spr=https%2Chttp&sig=uaLWFmWsuKj7ETgmtlorbK5Y7qrCpETSDcg079gPBiI%3D&az=oaivgprodscus",
+        color: "#48C9B0", // mar de esperança
+        bg: "linear-gradient(135deg, #E8F6F3 0%, #D1F2EB 100%)"
+      },
+      {
+        text: "E então, em um instante mágico, ele percebeu que encontrará muito mais do que um amigo...",
+        img: "https://videos.openai.com/vg-assets/assets%2Ftask_01jz7p6wrnevp9w9gz4r9s1wxz%2F1751531181_img_1.webp?st=2025-07-03T06%3A50%3A41Z&se=2025-07-09T07%3A50%3A41Z&sks=b&skt=2025-07-03T06%3A50%3A41Z&ske=2025-07-09T07%3A50%3A41Z&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skoid=8ebb0df1-a278-4e2e-9c20-f2d373479b3a&skv=2019-02-02&sv=2018-11-09&sr=b&sp=r&spr=https%2Chttp&sig=1aDyyFtlojZgMZLJTP40ISQb9WwCm1x0BdYGiuqFMb0%3D&az=oaivgprodscus",
+        color: "#EB984E", // laranja mágico
+        bg: "linear-gradient(135deg, #FEF9E7 0%, #FCF3CF 100%)"
+      },
+      {
+        text: "…encontrará o amor que aqueceria seu coração para sempre. 💖",
+        img: "https://videos.openai.com/vg-assets/assets%2Ftask_01jz7n728tf1bsscehtytezjsh%2F1751530131_img_0.webp?st=2025-07-03T06%3A52%3A10Z&se=2025-07-09T07%3A52%3A10Z&sks=b&skt=2025-07-03T06%3A52%3A10Z&ske=2025-07-09T07%3A52%3A10Z&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skoid=8ebb0df1-a278-4e2e-9c20-f2d373479b3a&skv=2019-02-02&sv=2018-11-09&sr=b&sp=r&spr=https%2Chttp&sig=zkeZCVjMXtV4b%2B4%2BDQW%2BzrYxJq9bCuJJfJQ4GdMt8mk%3D&az=oaivgprodscus",
+        color: "#EC7063", // rosa suave
+        bg: "linear-gradient(135deg, #FDEDEC 0%, #FADBD8 100%)"
+      },
+      {
+        text: "Você aceita embarcar nessa aventura de ternura e amor comigo?",
+        img: "https://videos.openai.com/vg-assets/assets%2Ftask_01jz7pdhp3f2y9jc31wtsr4hbs%2F1751531386_img_0.webp?st=2025-07-03T06%3A49%3A26Z&se=2025-07-09T07%3A49%3A26Z&sks=b&skt=2025-07-03T06%3A49%3A26Z&ske=2025-07-09T07%3A49%3A26Z&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skoid=8ebb0df1-a278-4e2e-9c20-f2d373479b3a&skv=2019-02-02&sv=2018-11-09&sr=b&sp=r&spr=https%2Chttp&sig=tjuUQ4QKw11srXJRoNDBihjIl%2BmFjM4YdXn0tJ6D%2Bbo%3D&az=oaivgprodscus",
+        color: "#F1948A", // proposta romântica
+        bg: "linear-gradient(135deg, #F9EBEA 0%, #FDEDEC 100%)",
+        final: true
+      }
+    ];
+
+    let current = 0;
+    const textEl = document.getElementById('text');
+    const imgEl = document.getElementById('img');
+    const sceneImg = document.getElementById('scene-img');
+    const btn = document.getElementById('action-btn');
+    const progressBar = document.getElementById('progress-bar');
+
+    btn.onclick = showScene;
+
+    function showScene() {
+      const s = scenes[current];
+
+      // Atualiza cor de destaque e background
+      document.documentElement.style.setProperty('--highlight', s.color);
+      document.body.style.background = s.bg;
+
+      // Texto animado
+      textEl.innerHTML = s.text;
+      anime({
+        targets: textEl,
+        opacity: [0,1],
+        translateY: [20,0],
+        duration: 600,
+        easing: 'easeOutQuad'
+      });
+
+      // Imagem
+      if (s.img) {
+        sceneImg.src = s.img;
+        imgEl.style.display = 'block';
+        anime({
+          targets: '#scene-img',
+          scale: [0.8,1],
+          opacity: [0,1],
+          duration: 600,
+          easing: 'easeOutElastic(1, .8)'
+        });
+      } else {
+        anime({
+          targets: imgEl,
+          opacity: [1,0],
+          duration: 300,
+          easing: 'linear',
+          complete: () => imgEl.style.display = 'none'
+        });
+      }
+
+      // Barra de progresso
+      const pct = (current / (scenes.length - 1)) * 100;
+      anime({
+        targets: progressBar,
+        width: [`${pct}%`, `${pct + (100/(scenes.length-1))}%`],
+        duration: 400,
+        easing: 'linear'
+      });
+
+      // Botões finais ou próximo
+      if (s.final) {
+        btn.style.display = 'none';
+        ['Sim, com todo meu coração! 💍','Mais que sim! ❤️'].forEach(txt => {
+          const b = document.createElement('button');
+          b.textContent = txt;
+          b.onclick = showLove;
+          document.getElementById('container').append(b);
+        });
+      } else {
+        btn.textContent = current === 0 ? 'Começar' : 'Próximo';
+        btn.onclick = nextScene;
+      }
+
+      current++;
+    }
+
+    function nextScene() {
+      showScene();
+    }
+
+    function showLove() {
+      document.getElementById('container').innerHTML = `
+        <h1>Agora é oficial! 💕</h1>
+        <p>Minha jornada ficou completa com você ao meu lado. Te amo mais que tudo! 🐧❤️🐧</p>
+      `;
+      anime({
+        targets: '#container h1, #container p',
+        opacity: [0,1],
+        translateY: [20,0],
+        delay: anime.stagger(200),
+        duration: 800,
+        easing: 'easeOutQuad'
+      });
+    }
+  </script>
+</body>
+</html>
